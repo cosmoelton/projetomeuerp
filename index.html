@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ERP com Gráficos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-gray-100" x-data="app()" x-init="init()">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <aside
+        class="bg-green-800 text-white p-4 transition-all duration-300"
+        :class="menuAberto ? larguraSidebar : 'w-0 overflow-hidden'"
+      >
+        <h1 class="text-2xl font-bold mb-6" x-show="menuAberto">Meu ERP</h1>
+        <nav class="flex flex-col gap-5" x-show="menuAberto">
+          <a href="index.html" class="hover:bg-green-700 p-2 rounded">Painel</a>
+          <a href="cadastro-cliente.html" class="hover:bg-green-700 p-2 rounded">Cadastro</a>
+          <a href="produtos.html" class="hover:bg-green-700 p-2 rounded">Produtos</a>
+          <a href="servicos.html" class="hover:bg-green-700 p-2 rounded">Serviços</a>
+          <a href="orcamentos.html" class="hover:bg-green-700 p-2 rounded">Orçamentos</a>
+          <a href="ordens-servico.html" class="hover:bg-green-700 p-2 rounded">Ordens de serviços</a>
+          <a href="vendas.html" class="hover:bg-green-700 p-2 rounded">Vendas</a>
+          <a href="estoque.html" class="hover:bg-green-700 p-2 rounded">Estoque</a>
+          <a href="financeiro.html" class="hover:bg-green-700 p-2 rounded">Financeiro</a>
+          <a href="clientes.html" class="hover:bg-green-700 p-2 rounded">Clientes</a>
+        </nav>
+      </aside>
+
+      <!-- Área principal -->
+      <div class="flex-1 flex flex-col">
+        <header class="bg-white shadow p-5 flex justify-between items-center">
+          <div class="flex items-center gap-4">
+            <button
+              @click="menuAberto = !menuAberto"
+              class="text-green-700 font-bold text-xl mr-4"
+            >
+              ☰
+            </button>
+            <h2 class="text-xl font-semibold">Painel</h2>
+          </div>
+          <div>
+            <span class="mr-4">Olá, Usuário</span>
+            <button class="bg-red-500 text-white px-3 py-1 rounded">
+              Sair
+            </button>
+          </div>
+        </header>
+
+        <main class="p-6 flex-1 overflow-y-auto">
+          <h3 class="text-3xl font-bold mb-5">Visão Geral</h3>
+
+          <!-- Cards -->
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10"
+          >
+            <!-- Produtos -->
+            <div class="bg-white p-7 rounded shadow flex items-center gap-5">
+              <div class="text-green-700 text-5xl">📦</div>
+              <div>
+                <p class="text-gray-700">Produtos</p>
+                <h4 class="text-xl font-bold" x-text="totalProdutos"></h4>
+              </div>
+            </div>
+
+            <!-- Vendas -->
+            <div class="bg-white p-7 rounded shadow flex items-center gap-5">
+              <div class="text-green-700 text-5xl">💰</div>
+              <div>
+                <p class="text-gray-700">Vendas por mês</p>
+                <h4
+                  class="text-xl font-bold"
+                  x-text="`R$ ${totalVendas.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`"
+                ></h4>
+              </div>
+            </div>
+
+            <!-- Clientes -->
+            <div class="bg-white p-7 rounded shadow flex items-center gap-5">
+              <div class="text-green-700 text-5xl">👥</div>
+              <div>
+                <p class="text-gray-700">Clientes Ativos</p>
+                <h4 class="text-xl font-bold" x-text="totalClientesAtivos"></h4>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gráficos -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Gráfico de Vendas -->
+            <div class="bg-white p-7 rounded shadow mt-7">
+              <h4 class="text-xl font-semibold mb-5">Gráfico de Vendas</h4>
+              <canvas id="graficoVendas" height="200"></canvas>
+            </div>
+
+            <!-- Fluxo de Caixa -->
+            <div class="bg-white p-7 rounded shadow">
+              <h4 class="text-lg font-semibold mb-5">Fluxo de Caixa</h4>
+              <canvas id="graficoFluxo"></canvas>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+  </body>
+</html>

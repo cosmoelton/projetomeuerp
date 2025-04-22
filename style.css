@@ -1,0 +1,30 @@
+/* Estilos personalizados */
+body {
+  font-family: "Inter", sans-serif;
+}
+
+/* Ajustes para os gráficos */
+canvas {
+  max-height: 300px;
+}
+
+/* Estilo para o menu lateral */
+aside {
+  transition: all 0.3s ease;
+}
+
+/* Estilo para os inputs */
+input:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+/* Estilo para os botões */
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}

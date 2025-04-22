@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Produtos - ERP</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+      defer
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-gray-100" x-data="app()" x-init="init()">
+    <div class="flex h-screen">
+      <!-- Sidebar -->
+      <aside
+        class="bg-green-800 text-white p-4 transition-all duration-300"
+        :class="menuAberto ? larguraSidebar : 'w-0 overflow-hidden'"
+      >
+        <h1 class="text-2xl font-bold mb-6" x-show="menuAberto">Meu ERP</h1>
+        <nav class="flex flex-col gap-5" x-show="menuAberto">
+          <a href="index.html" class="hover:bg-green-700 p-2 rounded">Painel</a>
+          <a href="cadastro-cliente.html" class="hover:bg-green-700 p-2 rounded"
+            >Cadastro</a
+          >
+          <a
+            href="produtos.html"
+            class="hover:bg-green-700 p-2 rounded bg-green-700"
+            >Produtos</a
+          >
+          <a href="servicos.html" class="hover:bg-green-700 p-2 rounded"
+            >Serviços</a
+          >
+          <a href="orcamentos.html" class="hover:bg-green-700 p-2 rounded"
+            >Orçamentos</a
+          >
+          <a href="ordens-servico.html" class="hover:bg-green-700 p-2 rounded"
+            >Ordens de serviços</a
+          >
+          <a href="vendas.html" class="hover:bg-green-700 p-2 rounded"
+            >Vendas</a
+          >
+          <a href="estoque.html" class="hover:bg-green-700 p-2 rounded"
+            >Estoque</a
+          >
+          <a href="financeiro.html" class="hover:bg-green-700 p-2 rounded"
+            >Financeiro</a
+          >
+          <a href="clientes.html" class="hover:bg-green-700 p-2 rounded"
+            >Clientes</a
+          >
+        </nav>
+      </aside>
+
+      <!-- Área principal -->
+      <div class="flex-1 flex flex-col">
+        <header class="bg-white shadow p-5 flex justify-between items-center">
+          <div class="flex items-center gap-4">
+            <button
+              @click="menuAberto = !menuAberto"
+              class="text-green-700 font-bold text-xl mr-4"
+            >
+              ☰
+            </button>
+            <h2 class="text-xl font-semibold">Produtos</h2>
+          </div>
+          <div>
+            <span class="mr-4">Olá, Usuário</span>
+            <button class="bg-red-500 text-white px-3 py-1 rounded">
+              Sair
+            </button>
+          </div>
+        </header>
+
+        <main class="p-6 flex-1 overflow-y-auto">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold">Lista de Produtos</h3>
+            <button
+              @click="mostrarFormulario = true"
+              class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
+            >
+              Novo Produto
+            </button>
+          </div>
+
+          <!-- Formulário de Novo Produto -->
+          <div
+            x-show="mostrarFormulario"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          >
+            <div class="bg-white p-8 rounded-lg w-full max-w-2xl">
+              <h4 class="text-xl font-semibold mb-4">Novo Produto</h4>
+              <form @submit.prevent="adicionarProduto" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-gray-700 mb-2"
+                      >Nome do Produto</label
+                    >
+                    <input
+                      type="text"
+                      x-model="novoProduto.nome"
+                      class="w-full p-2 border rounded"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-gray-700 mb-2">Código</label>
+                    <input
+                      type="text"
+                      x-model="novoProduto.codigo"
+                      class="w-full p-2 border rounded"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-gray-700 mb-2">Preço</label>
+                    <input
+                      type="number"
+                      x-model="novoProduto.preco"
+                      step="0.01"
+                      class="w-full p-2 border rounded"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-gray-700 mb-2">Estoque</label>
+                    <input
+                      type="number"
+                      x-model="novoProduto.estoque"
+                      class="w-full p-2 border rounded"
+                      required
+                    />
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="block text-gray-700 mb-2">Descrição</label>
+                    <textarea
+                      x-model="novoProduto.descricao"
+                      class="w-full p-2 border rounded"
+                      rows="3"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="flex justify-end gap-4 mt-6">
+                  <button
+                    type="button"
+                    @click="mostrarFormulario = false"
+                    class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
+                  >
+                    Salvar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Lista de Produtos -->
+          <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="min-w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Código
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Nome
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Preço
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Estoque
+                  </th>
+                  <th
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Ações
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <template x-for="produto in produtos" :key="produto.id">
+                  <tr>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap"
+                      x-text="produto.codigo"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap"
+                      x-text="produto.nome"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap"
+                      x-text="`R$ ${produto.preco.toFixed(2)}`"
+                    ></td>
+                    <td
+                      class="px-6 py-4 whitespace-nowrap"
+                      x-text="produto.estoque"
+                    ></td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                      <button
+                        @click="editarProduto(produto)"
+                        class="text-blue-600 hover:text-blue-900 mr-2"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        @click="excluirProduto(produto)"
+                        class="text-red-600 hover:text-red-900"
+                      >
+                        Excluir
+                      </button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      function app() {
+        return {
+          menuAberto: true,
+          larguraSidebar: "w-64",
+          mostrarFormulario: false,
+          produtos: [
+            {
+              id: 1,
+              codigo: "P001",
+              nome: "Produto 1",
+              preco: 100.0,
+              estoque: 50,
+              descricao: "Descrição do produto 1",
+            },
+            {
+              id: 2,
+              codigo: "P002",
+              nome: "Produto 2",
+              preco: 200.0,
+              estoque: 30,
+              descricao: "Descrição do produto 2",
+            },
+            {
+              id: 3,
+              codigo: "P003",
+              nome: "Produto 3",
+              preco: 150.0,
+              estoque: 20,
+              descricao: "Descrição do produto 3",
+            },
+          ],
+          novoProduto: {
+            nome: "",
+            codigo: "",
+            preco: 0,
+            estoque: 0,
+            descricao: "",
+          },
+
+          init() {
+            // Inicialização se necessário
+          },
+
+          adicionarProduto() {
+            const novoId = Math.max(...this.produtos.map((p) => p.id), 0) + 1;
+            this.produtos.push({
+              id: novoId,
+              ...this.novoProduto,
+            });
+            this.mostrarFormulario = false;
+            this.novoProduto = {
+              nome: "",
+              codigo: "",
+              preco: 0,
+              estoque: 0,
+              descricao: "",
+            };
+          },
+
+          editarProduto(produto) {
+            // Implementar edição
+          },
+
+          excluirProduto(produto) {
+            this.produtos = this.produtos.filter((p) => p.id !== produto.id);
+          },
+        };
+      }
+    </script>
+  </body>
+</html>
